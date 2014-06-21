@@ -21,8 +21,8 @@ package com.github.snowdream.android.app.codegenerator;
  */
 public class Field extends Generator {
 
-    public Field(String name) {
-        super(name);
+    public Field(String name, int modifiers) {
+        super(name, modifiers);
     }
 
     @Override

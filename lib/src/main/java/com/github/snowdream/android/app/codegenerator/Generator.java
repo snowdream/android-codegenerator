@@ -30,8 +30,9 @@ public abstract class Generator {
     private Generator() {
     }
 
-    public Generator(String name) {
+    public Generator(String name, int modifiers ) {
         this.name = name;
+        this.modifiers=modifiers;
     }
 
     protected String generate() {

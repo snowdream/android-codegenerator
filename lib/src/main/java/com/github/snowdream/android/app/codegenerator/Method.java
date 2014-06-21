@@ -20,9 +20,8 @@ package com.github.snowdream.android.app.codegenerator;
  * Created by hui.yang on 2014/6/22.
  */
 public class Method extends Generator{
-
-    public Method(String name) {
-        super(name);
+    public Method(String name, int modifiers) {
+        super(name, modifiers);
     }
 
     @Override

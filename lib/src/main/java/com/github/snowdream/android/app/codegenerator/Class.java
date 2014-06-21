@@ -27,8 +27,8 @@ public class Class extends Generator {
     private Set<Method> methods = null;
     private Set<Class> classes = null;
 
-    public Class(String name) {
-        super(name);
+    public Class(String name, int modifiers) {
+        super(name, modifiers);
 
         fields = new HashSet<Field>();
         methods = new HashSet<Method>();
