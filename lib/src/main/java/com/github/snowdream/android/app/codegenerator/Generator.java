@@ -16,9 +16,81 @@
 
 package com.github.snowdream.android.app.codegenerator;
 
+import android.text.TextUtils;
+
+import java.lang.reflect.Modifier;
+
 /**
  * Created by hui.yang on 2014/6/22.
  */
-public interface Generator {
-    public T <T> generate();
+public abstract class Generator {
+    private int modifiers = 0x00000000;
+    protected String name = null;
+
+    private Generator() {
+    }
+
+    public Generator(String name) {
+        this.name = name;
+    }
+
+    protected String generate() {
+        if (TextUtils.isEmpty(name)) {
+            throw new EmptyException("The name is null or empty.");
+        }
+
+        return null;
+    }
+
+    protected abstract void check();
+
+    /**
+     * Returns a string containing the string representation of all modifiers
+     * present in the specified modifiers. Modifiers appear in the order
+     * specified by the Java Language Specification.
+     */
+    protected String generateModifierString() {
+        StringBuilder buf = new StringBuilder();
+        if (Modifier.isPublic(modifiers)) {
+            buf.append("public ");
+        }
+        if (Modifier.isProtected(modifiers)) {
+            buf.append("protected ");
+        }
+        if (Modifier.isPrivate(modifiers)) {
+            buf.append("private ");
+        }
+        if (Modifier.isAbstract(modifiers)) {
+            buf.append("abstract ");
+        }
+        if (Modifier.isStatic(modifiers)) {
+            buf.append("static ");
+        }
+        if (Modifier.isFinal(modifiers)) {
+            buf.append("final ");
+        }
+        if (Modifier.isTransient(modifiers)) {
+            buf.append("transient ");
+        }
+        if (Modifier.isVolatile(modifiers)) {
+            buf.append("volatile ");
+        }
+        if (Modifier.isSynchronized(modifiers)) {
+            buf.append("synchronized ");
+        }
+        if (Modifier.isNative(modifiers)) {
+            buf.append("native ");
+        }
+        if (Modifier.isStrict(modifiers)) {
+            buf.append("strictfp ");
+        }
+        if (Modifier.isInterface(modifiers)) {
+            buf.append("interface ");
+        }
+        if (buf.length() == 0) {
+            return "";
+        }
+        buf.setLength(buf.length() - 1);
+        return buf.toString();
+    }
 }
