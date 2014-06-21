@@ -14,14 +14,11 @@
  * limitations under the License.
  */
 
-package com.github.snowdream.android.template.library;
+package com.github.snowdream.android.app.codegenerator;
 
 /**
- * Created by snowdream on 11/17/13.
+ * Created by hui.yang on 2014/6/22.
  */
-public class HelloWorldLib {
-
-    public static String getHelloWorld(){
-        return "Hello World From HelloWorldLib!";
-    }
+public interface Generator {
+    public T <T> generate();
 }

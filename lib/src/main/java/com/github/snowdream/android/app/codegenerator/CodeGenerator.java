@@ -14,4 +14,10 @@
  * limitations under the License.
  */
 
-include ':lib'
+package com.github.snowdream.android.app.codegenerator;
+
+/**
+ * Created by hui.yang on 2014/6/22.
+ */
+public class CodeGenerator {
+}
