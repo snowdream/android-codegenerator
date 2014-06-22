@@ -16,7 +16,6 @@
 
 package com.github.snowdream.android.app.codegenerator;
 
-import android.text.TextUtils;
 
 import java.lang.reflect.Modifier;
 
@@ -26,24 +25,31 @@ import java.lang.reflect.Modifier;
 public abstract class Generator {
     private int modifiers = 0x00000000;
     protected String name = null;
+    protected String type = null;
 
     private Generator() {
+        check();
     }
 
-    public Generator(String name, int modifiers ) {
+    public Generator(String name, int modifiers, String type) {
+        check();
+
         this.name = name;
-        this.modifiers=modifiers;
+        this.modifiers = modifiers;
+        this.type = type;
     }
 
-    protected String generate() {
-        if (TextUtils.isEmpty(name)) {
+    protected abstract String generate();
+
+    protected void check() {
+        if (name != null && name != "") {
             throw new EmptyException("The name is null or empty.");
         }
 
-        return null;
+        if (type != null && type != "") {
+            throw new EmptyException("The type is null or empty.");
+        }
     }
-
-    protected abstract void check();
 
     /**
      * Returns a string containing the string representation of all modifiers

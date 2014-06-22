@@ -16,16 +16,24 @@
 
 package com.github.snowdream.android.app.codegenerator;
 
+import android.util.Log;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 /**
  * Created by hui.yang on 2014/6/22.
  */
 public class CodeGenerator {
     private Class mClass = null;
     private boolean isDebug = true;
+    private String path = null;
 
     public CodeGenerator() {
     }
-    public void enableDebug(boolean isDebug){
+
+    public void enableDebug(boolean isDebug) {
         this.isDebug = isDebug;
     }
 
@@ -42,7 +50,7 @@ public class CodeGenerator {
     }
 
     public final CodeGenerator addClass(final Class clazz) {
-        mClass= clazz;
+        mClass = clazz;
         return this;
     }
 
@@ -52,8 +60,23 @@ public class CodeGenerator {
         return this;
     }
 
-    private void check(){
-        if (mClass == null){
+    public final CodeGenerator setPath(final String path) {
+        check();
+        if (path != null) {
+            StringBuilder buf = new StringBuilder();
+            buf.append(path);
+            buf.append(Mark.FILE_SEPERATOR);
+            buf.append(mClass.name);
+            if (!mClass.name.endsWith(".java")) {
+                buf.append(".java");
+            }
+            this.path = buf.toString();
+        }
+        return this;
+    }
+
+    private void check() {
+        if (mClass == null) {
             throw new NullPointerException("The Class is Null.");
         }
     }
@@ -64,10 +87,45 @@ public class CodeGenerator {
         StringBuilder buf = new StringBuilder();
         buf.append(mClass.generate());
 
-        if (isDebug){
+        if (isDebug) {
             System.out.print(buf.toString());
         }
-
+        writeToFile(buf.toString());
         return buf.toString();
+    }
+
+    public void writeToFile(String str) {
+        if (str == null || str == "") {
+            Log.w("Warn", "The is no data to write.");
+            return;
+        }
+        File file = null;
+        FileOutputStream fop = null;
+        try {
+            file = new File(path);
+            fop = new FileOutputStream(file);
+
+            if (file.exists()) {
+                file.delete();
+            }
+            file.createNewFile();
+
+            // get the content in bytes
+            byte[] contentInBytes = str.getBytes();
+
+            fop.write(contentInBytes);
+            fop.flush();
+            fop.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (fop != null) {
+                    fop.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

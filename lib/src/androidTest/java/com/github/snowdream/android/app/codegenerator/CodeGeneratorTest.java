@@ -37,12 +37,15 @@ public class CodeGeneratorTest extends AndroidTestCase {
 
     public void testGenerateField() throws Exception {
         String str = null;
-        Field  field = new Field("isGood", Modifier.PUBLIC);
-        Class clazz = new Class("Love", Modifier.PUBLIC);
+        Field  field = new Field("isGood", Modifier.PUBLIC,"boolean","false");
+        field.createGetAndSetMethod(true);
+        Class clazz = new Class("Love", Modifier.PUBLIC,"class");
+        clazz.addImports("com.github.snowdream.android.app.codegenerator");
         clazz.addField(field);
 
         CodeGenerator generator = new CodeGenerator();
         generator.addClass(clazz);
+        generator.setPath("/sdcard/snowdream");
         str = generator.generate();
         assertNotNull(str);
     }

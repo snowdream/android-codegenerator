@@ -26,13 +26,29 @@ public class Class extends Generator {
     private Set<Field> fields = null;
     private Set<Method> methods = null;
     private Set<Class> classes = null;
+    private Set<Interface> interfaces = null;
+    private Set<Interface> aimplements = null;
+    private Set<String>  packagenames = null;
+    private boolean isInner = false;
 
-    public Class(String name, int modifiers) {
-        super(name, modifiers);
+    public Class(String name, int modifiers, String type) {
+        super(name, modifiers, type);
+        check();
 
         fields = new HashSet<Field>();
         methods = new HashSet<Method>();
         classes = new HashSet<Class>();
+        interfaces = new HashSet<Interface>();
+        aimplements = new HashSet<Interface>();
+        packagenames = new HashSet<String>();
+    }
+
+    public void addImports(String packagename) {
+        packagenames.add(packagename);
+    }
+
+    public void addImplement(Interface ainterface) {
+        aimplements.add(ainterface);
     }
 
     public void addField(Field field) {
@@ -44,25 +60,77 @@ public class Class extends Generator {
     }
 
     public void addClass(Class clazz){
+        if (clazz != null){
+            clazz.setInner(true);
+        }
         classes.add(clazz);
     }
 
     @Override
     public String generate() {
-        check();
-
         StringBuilder buf = new StringBuilder();
+        //generate imports
+        for (String packagename: packagenames ){
+            if (packagename == null || packagename ==""){
+                continue;
+            }
+            buf.append("import ");
+            buf.append(packagename);
+            buf.append(Mark.SEMICOLON);
+            buf.append(Mark.RETURN);
+        }
+       if (!packagenames.isEmpty()){
+           buf.append(Mark.LINE_SEPERATOR);
+       }
+
+        //generate class
+        buf.append(generateModifierString());
+        buf.append(Mark.SPACE);
+        buf.append(type);
+        buf.append(Mark.SPACE);
+        buf.append(name);
+        buf.append(Mark.LEFT_BRACE);
+        buf.append(Mark.LINE_SEPERATOR);
 
         //generate field
         for (Field field: fields){
+            if (field == null){
+                continue;
+            }
             buf.append(field.generate());
-            buf.append(Mark.BLANK_LINE);
+            buf.append(Mark.LINE_SEPERATOR);
         }
+
+        //generate get and set method for fileds when the autoCreateGetandSet of it is true.
+        for (Field field: fields){
+            if (field == null){
+                continue;
+            }
+
+            if (!field.autoCreateGetandSet){
+                continue;
+            }
+
+
+            buf.append(Method.generateGetMethodForField(field));
+            buf.append(Method.generateSetMethodForField(field));
+        }
+
+        //generate class(close)
+        buf.append(Mark.RIGHT_BRACE);
 
         return  buf.toString();
     }
 
     @Override
     protected void check() {
+    }
+
+    public boolean isInner() {
+        return isInner;
+    }
+
+    public void setInner(boolean isInner) {
+        this.isInner = isInner;
     }
 }

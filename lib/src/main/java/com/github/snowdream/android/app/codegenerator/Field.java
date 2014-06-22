@@ -20,23 +20,42 @@ package com.github.snowdream.android.app.codegenerator;
  * Created by hui.yang on 2014/6/22.
  */
 public class Field extends Generator {
+    protected String value = null;
+    protected boolean autoCreateGetandSet = true;
 
-    public Field(String name, int modifiers) {
-        super(name, modifiers);
+    public Field(String name, int modifiers, String type) {
+        super(name, modifiers, type);
+        check();
+    }
+
+    public Field(String name, int modifiers, String type, String value) {
+        super(name, modifiers, type);
+        this.value = value;
+        check();
     }
 
     @Override
     public String generate() {
-        check();
-
         StringBuilder buf = new StringBuilder();
         buf.append(generateModifierString());
+        buf.append(Mark.SPACE);
+        buf.append(type);
+        buf.append(Mark.SPACE);
         buf.append(name);
-        buf.append(Mark.EQUAL);
+        if (value != null && value != "") {
+            buf.append(Mark.EQUAL);
+            buf.append(value);
+        }
+        buf.append(Mark.SEMICOLON);
         return buf.toString();
     }
 
     @Override
     protected void check() {
+    }
+
+    public Field createGetAndSetMethod(boolean isAuto) {
+        autoCreateGetandSet = isAuto;
+        return this;
     }
 }

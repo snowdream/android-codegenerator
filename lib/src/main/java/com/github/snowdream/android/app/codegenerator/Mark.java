@@ -32,5 +32,20 @@ public class Mark {
 
     public static final String DIVIDE = " / ";
 
-    public static final String BLANK_LINE = " \\r\\n  ";
+    public static final String LINE_SEPERATOR = System.getProperty("line.separator")+" \n  ";
+
+    public static final String SEMICOLON = ";";
+
+    public static final String SPACE = " ";
+
+    public static final String RETURN = System.getProperty("line.separator");
+
+    public static final String LEFT_BRACE = "{ ";
+
+    public static final String RIGHT_BRACE = "} ";
+
+    public static final String TAB = "\t ";
+
+    public static final String FILE_SEPERATOR = System.getProperty("file.separator");
+
 }
