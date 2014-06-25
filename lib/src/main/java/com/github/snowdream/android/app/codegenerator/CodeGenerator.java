@@ -26,7 +26,7 @@ import java.io.IOException;
  * Created by hui.yang on 2014/6/22.
  */
 public class CodeGenerator {
-    private Class mClass = null;
+    private ClassItem mClass = null;
     private boolean isDebug = true;
     private String path = null;
 
@@ -37,24 +37,24 @@ public class CodeGenerator {
         this.isDebug = isDebug;
     }
 
-    public final CodeGenerator addField(final Field field) {
+    public final CodeGenerator addField(final FieldItem field) {
         check();
         mClass.addField(field);
         return this;
     }
 
-    public final CodeGenerator addMethod(final Method method) {
+    public final CodeGenerator addMethod(final MethodItem method) {
         check();
         mClass.addMethod(method);
         return this;
     }
 
-    public final CodeGenerator addClass(final Class clazz) {
+    public final CodeGenerator addClass(final ClassItem clazz) {
         mClass = clazz;
         return this;
     }
 
-    public final CodeGenerator addInnerClass(final Class clazz) {
+    public final CodeGenerator addInnerClass(final ClassItem clazz) {
         check();
         mClass.addClass(clazz);
         return this;

@@ -17,7 +17,6 @@
 package com.github.snowdream.android.app.codegenerator;
 
 import android.test.AndroidTestCase;
-import junit.framework.TestCase;
 
 import java.lang.reflect.Modifier;
 
@@ -37,9 +36,9 @@ public class CodeGeneratorTest extends AndroidTestCase {
 
     public void testGenerateField() throws Exception {
         String str = null;
-        Field  field = new Field("isGood", Modifier.PUBLIC,"boolean","false");
+        FieldItem field = new FieldItem("isGood", Modifier.PUBLIC,"boolean","false");
         field.createGetAndSetMethod(true);
-        Class clazz = new Class("Love", Modifier.PUBLIC,"class");
+        ClassItem clazz = new ClassItem("Love", Modifier.PUBLIC,"class");
         clazz.addImports("com.github.snowdream.android.app.codegenerator");
         clazz.addField(field);
 

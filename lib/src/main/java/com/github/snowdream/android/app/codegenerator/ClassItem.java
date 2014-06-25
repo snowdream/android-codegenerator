@@ -22,24 +22,24 @@ import java.util.Set;
 /**
  * Created by hui.yang on 2014/6/22.
  */
-public class Class extends Generator {
-    private Set<Field> fields = null;
-    private Set<Method> methods = null;
-    private Set<Class> classes = null;
-    private Set<Interface> interfaces = null;
-    private Set<Interface> aimplements = null;
+public class ClassItem extends Generator {
+    private Set<FieldItem> fields = null;
+    private Set<MethodItem> methods = null;
+    private Set<ClassItem> classes = null;
+    private Set<InterfaceItem> interfaces = null;
+    private Set<InterfaceItem> aimplements = null;
     private Set<String>  packagenames = null;
     private boolean isInner = false;
 
-    public Class(String name, int modifiers, String type) {
+    public ClassItem(String name, int modifiers, String type) {
         super(name, modifiers, type);
         check();
 
-        fields = new HashSet<Field>();
-        methods = new HashSet<Method>();
-        classes = new HashSet<Class>();
-        interfaces = new HashSet<Interface>();
-        aimplements = new HashSet<Interface>();
+        fields = new HashSet<FieldItem>();
+        methods = new HashSet<MethodItem>();
+        classes = new HashSet<ClassItem>();
+        interfaces = new HashSet<InterfaceItem>();
+        aimplements = new HashSet<InterfaceItem>();
         packagenames = new HashSet<String>();
     }
 
@@ -47,19 +47,19 @@ public class Class extends Generator {
         packagenames.add(packagename);
     }
 
-    public void addImplement(Interface ainterface) {
+    public void addImplement(InterfaceItem ainterface) {
         aimplements.add(ainterface);
     }
 
-    public void addField(Field field) {
+    public void addField(FieldItem field) {
         fields.add(field);
     }
 
-    public void addMethod(Method method) {
+    public void addMethod(MethodItem method) {
         methods.add(method);
     }
 
-    public void addClass(Class clazz){
+    public void addClass(ClassItem clazz){
         if (clazz != null){
             clazz.setInner(true);
         }
@@ -93,7 +93,7 @@ public class Class extends Generator {
         buf.append(Mark.LINE_SEPERATOR);
 
         //generate field
-        for (Field field: fields){
+        for (FieldItem field: fields){
             if (field == null){
                 continue;
             }
@@ -102,7 +102,7 @@ public class Class extends Generator {
         }
 
         //generate get and set method for fileds when the autoCreateGetandSet of it is true.
-        for (Field field: fields){
+        for (FieldItem field: fields){
             if (field == null){
                 continue;
             }
@@ -112,8 +112,8 @@ public class Class extends Generator {
             }
 
 
-            buf.append(Method.generateGetMethodForField(field));
-            buf.append(Method.generateSetMethodForField(field));
+            buf.append(MethodItem.generateGetMethodForField(field));
+            buf.append(MethodItem.generateSetMethodForField(field));
         }
 
         //generate class(close)

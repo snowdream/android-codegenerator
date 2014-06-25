@@ -19,9 +19,9 @@ package com.github.snowdream.android.app.codegenerator;
 /**
  * Created by hui.yang on 2014/6/22.
  */
-public class Method extends Generator {
+public class MethodItem extends Generator {
 
-    public Method(String name, int modifiers, String type) {
+    public MethodItem(String name, int modifiers, String type) {
         super(name, modifiers, type);
         check();
     }
@@ -35,7 +35,7 @@ public class Method extends Generator {
     protected void check() {
     }
 
-    public static final String generateGetMethodForField(Field field) {
+    public static final String generateGetMethodForField(FieldItem field) {
         StringBuilder buf = new StringBuilder();
         buf.append("public");
         buf.append(Mark.SPACE);
@@ -55,7 +55,7 @@ public class Method extends Generator {
         return buf.toString();
     }
 
-    public static final String generateSetMethodForField(Field field) {
+    public static final String generateSetMethodForField(FieldItem field) {
         StringBuilder buf = new StringBuilder();
         buf.append("public");
         buf.append(Mark.SPACE);

@@ -19,16 +19,16 @@ package com.github.snowdream.android.app.codegenerator;
 /**
  * Created by hui.yang on 2014/6/22.
  */
-public class Field extends Generator {
+public class FieldItem extends Generator {
     protected String value = null;
     protected boolean autoCreateGetandSet = true;
 
-    public Field(String name, int modifiers, String type) {
+    public FieldItem(String name, int modifiers, String type) {
         super(name, modifiers, type);
         check();
     }
 
-    public Field(String name, int modifiers, String type, String value) {
+    public FieldItem(String name, int modifiers, String type, String value) {
         super(name, modifiers, type);
         this.value = value;
         check();
@@ -54,7 +54,7 @@ public class Field extends Generator {
     protected void check() {
     }
 
-    public Field createGetAndSetMethod(boolean isAuto) {
+    public FieldItem createGetAndSetMethod(boolean isAuto) {
         autoCreateGetandSet = isAuto;
         return this;
     }
