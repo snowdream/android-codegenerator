@@ -36,13 +36,13 @@ public class Mark {
 
     public static final String SPACE = " ";
 
-    public static final String RETURN = System.getProperty("line.separator");
+    public static final String LEFT_BRACE = "{";
 
-    public static final String LEFT_BRACE = "{ ";
+    public static final String RIGHT_BRACE = "}";
 
-    public static final String RIGHT_BRACE = "} ";
+    public static final String TAB = "\t";
 
-    public static final String TAB = "\t ";
+    public static final String TAB_SPACE = "    ";
 
     public static final String PATH_SEPERATOR = System.getProperty("path.separator");
 

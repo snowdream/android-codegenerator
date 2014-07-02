@@ -16,14 +16,14 @@
 
 package com.github.snowdream.android.app.codegenerator;
 
-import android.test.AndroidTestCase;
+import junit.framework.TestCase;
 
 import java.lang.reflect.Modifier;
 
 /**
  * Created by hui.yang on 2014/6/22.
  */
-public class CodeGeneratorTest extends AndroidTestCase {
+public class CodeGeneratorTest extends TestCase {
     @Override
     public void setUp() throws Exception {
         super.setUp();
@@ -36,11 +36,21 @@ public class CodeGeneratorTest extends AndroidTestCase {
 
     public void testGenerateField() throws Exception {
         String str = null;
-        FieldItem field = new FieldItem("isGood", Modifier.PUBLIC,"boolean","false");
-        field.createGetAndSetMethod(true);
-        ClassItem clazz = new ClassItem("Love", Modifier.PUBLIC,"class");
-        clazz.addImports("com.github.snowdream.android.app.codegenerator");
-        clazz.addField(field);
+        ClassItem clazz = new ClassItem("com.example.demo","KV_", Modifier.PUBLIC,"class");
+        clazz.addCopyright("/** Automatically generated file. DO NOT MODIFY */");
+        clazz.addImport("android.content.SharedPreferences");
+        clazz.addImport("android.content.SharedPreferences.Editor");
+        clazz.addImport("com.autonavi.common.CC");
+        clazz.addImport("com.example.demo.model.TaskConfig");
+
+        ClassItem innerclazz = new ClassItem("g0", Modifier.PUBLIC | Modifier.STATIC,"TaskConfig");
+        FieldItem fieldItem = new FieldItem("sp",Modifier.PROTECTED,"SharedPreferences","CC.getApplication().getSharedPreferences(\"config\", 0)");
+        fieldItem.generateGetandSetMethod(true);
+        innerclazz.addField(fieldItem);
+
+        FieldItem fieldItem1 = new FieldItem("editor",Modifier.PRIVATE,"Editor");
+        innerclazz.addField(fieldItem1);
+        clazz.addClass(innerclazz);
 
         CodeGenerator generator = new CodeGenerator();
         generator.addClass(clazz);

@@ -17,6 +17,8 @@
 package com.github.snowdream.android.app.codegenerator;
 
 
+import com.github.snowdream.android.app.codegenerator.formatter.Formatter;
+
 import java.lang.reflect.Modifier;
 
 /**
@@ -26,14 +28,12 @@ public abstract class Generator {
     private int modifiers = 0x00000000;
     protected String name = null;
     protected String type = null;
+    protected static Formatter formatter = null;
 
     private Generator() {
-        check();
     }
 
     public Generator(String name, int modifiers, String type) {
-        check();
-
         this.name = name;
         this.modifiers = modifiers;
         this.type = type;
@@ -42,12 +42,21 @@ public abstract class Generator {
     protected abstract String generate();
 
     protected void check() {
-        if (name != null && name != "") {
+        if (name == null || name == "") {
             throw new EmptyException("The name is null or empty.");
         }
 
-        if (type != null && type != "") {
+        if (type == null || type == "") {
             throw new EmptyException("The type is null or empty.");
+        }
+
+        //check modifiers
+        if (this instanceof FieldItem) {
+
+        } else if (this instanceof MethodItem) {
+
+        } else if (this instanceof MethodItem) {
+
         }
     }
 

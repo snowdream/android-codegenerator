@@ -28,13 +28,13 @@ public class ClassItem extends Generator {
     private Set<ClassItem> classes = null;
     private Set<InterfaceItem> interfaces = null;
     private Set<InterfaceItem> aimplements = null;
-    private Set<String>  packagenames = null;
+    private Set<String> packagenames = null;
+    private String packagename = null;
+    private String copyright = null;
     private boolean isInner = false;
 
     public ClassItem(String name, int modifiers, String type) {
         super(name, modifiers, type);
-        check();
-
         fields = new HashSet<FieldItem>();
         methods = new HashSet<MethodItem>();
         classes = new HashSet<ClassItem>();
@@ -43,7 +43,22 @@ public class ClassItem extends Generator {
         packagenames = new HashSet<String>();
     }
 
-    public void addImports(String packagename) {
+    public ClassItem(String packagename, String name, int modifiers, String type) {
+        super(name, modifiers, type);
+        this.packagename = packagename;
+        fields = new HashSet<FieldItem>();
+        methods = new HashSet<MethodItem>();
+        classes = new HashSet<ClassItem>();
+        interfaces = new HashSet<InterfaceItem>();
+        aimplements = new HashSet<InterfaceItem>();
+        packagenames = new HashSet<String>();
+    }
+
+    public void addCopyright(String copyright) {
+        this.copyright = copyright;
+    }
+
+    public void addImport(String packagename) {
         packagenames.add(packagename);
     }
 
@@ -59,8 +74,8 @@ public class ClassItem extends Generator {
         methods.add(method);
     }
 
-    public void addClass(ClassItem clazz){
-        if (clazz != null){
+    public void addClass(ClassItem clazz) {
+        if (clazz != null) {
             clazz.setInner(true);
         }
         classes.add(clazz);
@@ -69,22 +84,38 @@ public class ClassItem extends Generator {
     @Override
     public String generate() {
         StringBuilder buf = new StringBuilder();
-        //generate imports
-        for (String packagename: packagenames ){
-            if (packagename == null || packagename ==""){
-                continue;
-            }
-            buf.append("import ");
+        if (!isInner()) {
+            //generate copyright
+            buf.append(copyright);
+            buf.append(Mark.LINE_SEPERATOR);
+
+            //generate package
+            buf.append("package");
+            buf.append(Mark.SPACE);
             buf.append(packagename);
             buf.append(Mark.SEMICOLON);
-            buf.append(Mark.RETURN);
+            buf.append(Mark.LINE_SEPERATOR);
+            buf.append(Mark.LINE_SEPERATOR);
+
+            //generate imports
+            for (String packagename : packagenames) {
+                if (packagename == null || packagename == "") {
+                    continue;
+                }
+                buf.append("import ");
+                buf.append(packagename);
+                buf.append(Mark.SEMICOLON);
+                buf.append(Mark.LINE_SEPERATOR);
+            }
+            if (!packagenames.isEmpty()) {
+                buf.append(Mark.LINE_SEPERATOR);
+            }
         }
-       if (!packagenames.isEmpty()){
-           buf.append(Mark.LINE_SEPERATOR);
-       }
 
         //generate class
         buf.append(generateModifierString());
+        buf.append(Mark.SPACE);
+        buf.append("class");
         buf.append(Mark.SPACE);
         buf.append(type);
         buf.append(Mark.SPACE);
@@ -93,37 +124,45 @@ public class ClassItem extends Generator {
         buf.append(Mark.LINE_SEPERATOR);
 
         //generate field
-        for (FieldItem field: fields){
-            if (field == null){
+        for (FieldItem field : fields) {
+            if (field == null) {
                 continue;
             }
             buf.append(field.generate());
             buf.append(Mark.LINE_SEPERATOR);
         }
-
-        //generate get and set method for fileds when the autoCreateGetandSet of it is true.
-        for (FieldItem field: fields){
-            if (field == null){
+        buf.append(Mark.LINE_SEPERATOR);
+        //generate get and set method for fileds when the autoGenerateGetandSetMethod of it is true.
+        for (FieldItem field : fields) {
+            if (field == null) {
                 continue;
             }
 
-            if (!field.autoCreateGetandSet){
+            if (!field.autoGenerateGetandSetMethod) {
                 continue;
             }
-
 
             buf.append(MethodItem.generateGetMethodForField(field));
+            buf.append(Mark.LINE_SEPERATOR);
+            buf.append(Mark.LINE_SEPERATOR);
             buf.append(MethodItem.generateSetMethodForField(field));
         }
 
+        //generate inner class
+        for (ClassItem clazz:classes){
+            if (clazz == null) {
+                continue;
+            }
+
+            buf.append(clazz.generate());
+            buf.append(Mark.LINE_SEPERATOR);
+        }
+
         //generate class(close)
+        buf.append(Mark.LINE_SEPERATOR);
         buf.append(Mark.RIGHT_BRACE);
 
-        return  buf.toString();
-    }
-
-    @Override
-    protected void check() {
+        return buf.toString();
     }
 
     public boolean isInner() {

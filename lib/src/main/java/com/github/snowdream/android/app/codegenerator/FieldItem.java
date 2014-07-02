@@ -21,7 +21,7 @@ package com.github.snowdream.android.app.codegenerator;
  */
 public class FieldItem extends Generator {
     protected String value = null;
-    protected boolean autoCreateGetandSet = true;
+    protected boolean autoGenerateGetandSetMethod = false;
 
     public FieldItem(String name, int modifiers, String type) {
         super(name, modifiers, type);
@@ -37,6 +37,7 @@ public class FieldItem extends Generator {
     @Override
     public String generate() {
         StringBuilder buf = new StringBuilder();
+        buf.append(formatter.PROPERTY_START_WITH);
         buf.append(generateModifierString());
         buf.append(Mark.SPACE);
         buf.append(type);
@@ -50,12 +51,8 @@ public class FieldItem extends Generator {
         return buf.toString();
     }
 
-    @Override
-    protected void check() {
-    }
-
-    public FieldItem createGetAndSetMethod(boolean isAuto) {
-        autoCreateGetandSet = isAuto;
+    public FieldItem generateGetandSetMethod(boolean isAuto) {
+        autoGenerateGetandSetMethod = isAuto;
         return this;
     }
 }

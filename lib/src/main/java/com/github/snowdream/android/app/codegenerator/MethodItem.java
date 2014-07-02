@@ -20,23 +20,47 @@ package com.github.snowdream.android.app.codegenerator;
  * Created by hui.yang on 2014/6/22.
  */
 public class MethodItem extends Generator {
+    protected String body = null;
 
-    public MethodItem(String name, int modifiers, String type) {
+    public MethodItem(String name, int modifiers, String type,String body) {
         super(name, modifiers, type);
-        check();
-    }
-
-    @Override
-    public String generate() {
-        return null;
+        this.body = body;
     }
 
     @Override
     protected void check() {
+        super.check();
+        if (body == null || body ==""){
+            throw new EmptyException("The method has no body.");
+        }
     }
 
-    public static final String generateGetMethodForField(FieldItem field) {
+    @Override
+    public String generate() {
         StringBuilder buf = new StringBuilder();
+//        buf.append(formatter.METHOD_START_WITH);
+//        buf.append("public");
+//        buf.append(Mark.SPACE);
+//        buf.append(field.type);
+//        buf.append(Mark.SPACE);
+//        buf.append("get");
+//        buf.append(StringUtil.toUpperCaseFirstOne(field.name));
+//        buf.append("()");
+//        buf.append(Mark.LEFT_BRACE);
+//        buf.append(Mark.LINE_SEPERATOR);
+//        buf.append(formatter.METHOD_CONTENT_START_WITH);
+//        buf.append("return this.");
+//        buf.append(field.name);
+//        buf.append(Mark.SEMICOLON);
+//        buf.append(Mark.LINE_SEPERATOR);
+//        buf.append(formatter.METHOD_START_WITH);
+//        buf.append(Mark.RIGHT_BRACE);
+        return buf.toString();
+    }
+
+    public static String generateGetMethodForField(FieldItem field) {
+        StringBuilder buf = new StringBuilder();
+        buf.append(formatter.METHOD_START_WITH);
         buf.append("public");
         buf.append(Mark.SPACE);
         buf.append(field.type);
@@ -45,18 +69,20 @@ public class MethodItem extends Generator {
         buf.append(StringUtil.toUpperCaseFirstOne(field.name));
         buf.append("()");
         buf.append(Mark.LEFT_BRACE);
-        buf.append(Mark.RETURN);
-        buf.append(Mark.TAB);
+        buf.append(Mark.LINE_SEPERATOR);
+        buf.append(formatter.METHOD_CONTENT_START_WITH);
         buf.append("return this.");
         buf.append(field.name);
         buf.append(Mark.SEMICOLON);
-        buf.append(Mark.RETURN);
+        buf.append(Mark.LINE_SEPERATOR);
+        buf.append(formatter.METHOD_START_WITH);
         buf.append(Mark.RIGHT_BRACE);
         return buf.toString();
     }
 
-    public static final String generateSetMethodForField(FieldItem field) {
+    public static String generateSetMethodForField(FieldItem field) {
         StringBuilder buf = new StringBuilder();
+        buf.append(formatter.METHOD_START_WITH);
         buf.append("public");
         buf.append(Mark.SPACE);
         buf.append("void");
@@ -69,14 +95,15 @@ public class MethodItem extends Generator {
         buf.append(field.name);
         buf.append(")");
         buf.append(Mark.LEFT_BRACE);
-        buf.append(Mark.RETURN);
-        buf.append(Mark.TAB);
+        buf.append(Mark.LINE_SEPERATOR);
+        buf.append(formatter.METHOD_CONTENT_START_WITH);
         buf.append("this.");
         buf.append(field.name);
         buf.append(Mark.EQUAL);
         buf.append(field.name);
         buf.append(Mark.SEMICOLON);
-        buf.append(Mark.RETURN);
+        buf.append(Mark.LINE_SEPERATOR);
+        buf.append(formatter.METHOD_START_WITH);
         buf.append(Mark.RIGHT_BRACE);
         return buf.toString();
     }

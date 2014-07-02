@@ -17,6 +17,9 @@
 package com.github.snowdream.android.app.codegenerator;
 
 import android.util.Log;
+import com.github.snowdream.android.app.codegenerator.formatter.EclipseFormatter;
+import com.github.snowdream.android.app.codegenerator.formatter.Formatter;
+import com.github.snowdream.android.app.codegenerator.formatter.JavaFormatter;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -29,8 +32,10 @@ public class CodeGenerator {
     private ClassItem mClass = null;
     private boolean isDebug = true;
     private String path = null;
+    private Formatter formatter = null;
 
     public CodeGenerator() {
+        setFormatter(Formatter.TYPE.JAVA);
     }
 
     public void enableDebug(boolean isDebug) {
@@ -73,6 +78,19 @@ public class CodeGenerator {
             this.path = buf.toString();
         }
         return this;
+    }
+
+    public void setFormatter(Formatter.TYPE type){
+        switch (type){
+            case JAVA:
+                formatter = new JavaFormatter();
+                break;
+            case ECLIPSE:
+                formatter = new EclipseFormatter();
+                break;
+        }
+
+        Generator.formatter = formatter;
     }
 
     private void check() {
